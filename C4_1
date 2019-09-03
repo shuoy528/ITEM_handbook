@@ -1,0 +1,21 @@
+## CHAPTER 4
+## Example 1
+
+from scipy.stats import norm
+from scipy.optimize import fsolve
+
+#Initialization
+n = 50 # sample size
+theta = 2 # true parameter value
+epsilon = norm.rvs(size=50, random_state=1000) # standard normal error
+y = theta + epsilon # Data Generating Process
+
+def foc_conditions(parameters, y):
+    n = len(y)
+    foc_lambda = (1/n) * sum((y - parameters[0]) / (1 + parameters[1] * (y - parameters[0])))
+    foc_theta = -(1/n) * sum(parameters[1] / (1 + parameters[1] * (y - parameters[0])))
+    focs = [foc_lambda, foc_theta]
+    return focs
+
+params_initial = [0, 0]
+solution = fsolve(foc_conditions, params_initial, args = (y))
